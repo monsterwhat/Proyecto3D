@@ -39,3 +39,6 @@ sysinfo.txt
 Icon?
 ehthumbs.db
 Thumbs.db
+*.log
+*.log
+3D/Logs/shadercompiler-UnityShaderCompiler.exe0.log
