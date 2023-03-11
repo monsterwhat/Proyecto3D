@@ -7,10 +7,29 @@ public class MeshGenerator : MonoBehaviour
     Vector3[] vertices;
     int[] triangles;
 
+    [Header("Terrain Settings")]
     public int xSize = 20;
     public int zSize = 20;
 
     public LayerMask groundMask;
+
+    [Header("Generation Settings")]
+    public float perlinScale = 0.05f;
+    public float simplexScale = 0.5f;
+
+    [Header("SpawnRates")]
+    public float hollowObjectSpawnRate = 0.1f; // The rate of spawning hollow objects
+    public float solidObjectSpawnRate = 0.01f; // The rate of spawning solid objects
+
+    [Header("Probabilities")]
+    public float[] solidObjectProbabilities;
+    public float[] hollowObjectProbabilities;
+
+    [Header("Prefabs")]
+    public GameObject[] hollowObjectPrefabs;
+    public GameObject[] solidObjectPrefabs;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +38,7 @@ public class MeshGenerator : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
         GetComponent<MeshCollider>().sharedMesh = mesh;
         GetComponent<MeshCollider>().convex = true;
+        groundMask = LayerMask.NameToLayer("GroundLayer");
 
         UpdateTerrain();
     }
@@ -27,21 +47,26 @@ public class MeshGenerator : MonoBehaviour
     {
         CreateShape();
         UpdateMesh();
-        SpawnGrassAndFlowers();
-        SpawnTrees();
-        SpawnBuildings();
+        SpawnSolidObjects();
+        SpawnHollowObjects();
         GetComponent<MeshCollider>().convex = false;
     }
 
     void CreateShape()
     {
+        float perlinScale = 0.05f;
+        float simplexScale = 0.5f;
+        float maxHeight = 2.0f;
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
 
         for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * 2f;
+                float perlin = Mathf.PerlinNoise(x * perlinScale, z * perlinScale);
+                float simplex = Mathf.PerlinNoise(x * simplexScale, z * simplexScale);
+                float y = perlin + (simplex * 0.5f);
+                y *= maxHeight;
                 vertices[i] = new Vector3(x, y, z);
                 i++;
             }
@@ -70,6 +95,7 @@ public class MeshGenerator : MonoBehaviour
         }
     }
 
+
     void UpdateMesh()
     {
         mesh.Clear();
@@ -86,20 +112,71 @@ public class MeshGenerator : MonoBehaviour
         }
     }
 
-    public GameObject[] grassAndFlowerPrefabs;
-
-    public float spawnRate = 0.1f; // The rate of spawning grass and flowers
-
-    void SpawnGrassAndFlowers()
+    void SpawnSolidObjects()
     {
         for (int i = 0; i < vertices.Length; i++)
         {
-            // Randomly decide whether to spawn grass or flowers
-            if (Random.value < spawnRate)
+            // Randomly decide whether to spawn a solid object
+            if (Random.value < solidObjectSpawnRate)
             {
-                // Spawn a random prefab from the prefabs array
-                GameObject prefabToSpawn = grassAndFlowerPrefabs[Random.Range(0, grassAndFlowerPrefabs.Length)];
-                GameObject obj = Instantiate(prefabToSpawn);
+                // Randomly choose a solid object prefab based on its probability
+                float totalProbability = 0f;
+                for (int j = 0; j < solidObjectPrefabs.Length; j++)
+                {
+                    totalProbability += solidObjectProbabilities[j];
+                }
+
+                float randomValue = Random.value * totalProbability;
+                int chosenIndex = 0;
+                float cumulativeProbability = solidObjectProbabilities[chosenIndex];
+
+                while (randomValue > cumulativeProbability && chosenIndex < solidObjectPrefabs.Length - 1)
+                {
+                    chosenIndex++;
+                    cumulativeProbability += solidObjectProbabilities[chosenIndex];
+                }
+
+                GameObject solidObjectToSpawn = solidObjectPrefabs[chosenIndex];
+
+                GameObject obj = Instantiate(solidObjectToSpawn);
+
+                // Get the height of the terrain at the object's position
+                RaycastHit hit;
+                if (Physics.Raycast(vertices[i] + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity, groundMask))
+                {
+                    // Set the object's position to the terrain height plus a small offset
+                    obj.transform.position = new Vector3(vertices[i].x, hit.point.y + 0.05f, vertices[i].z);
+                }
+                else
+                {
+                    // If the raycast didn't hit the terrain, just position the object on the vertex with a small offset
+                    obj.transform.position = vertices[i] + Vector3.up * 0.05f;
+                }
+
+                obj.transform.localScale = Vector3.one * Random.Range(0.5f, 1.5f);
+                obj.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+                obj.transform.parent = transform;
+            }
+        }
+    }
+
+    void SpawnHollowObjects()
+    {
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            // Randomly decide whether to spawn a hollow object
+            if (Random.value < hollowObjectSpawnRate)
+            {
+                float randomProb = Random.value;
+                int j = 0;
+                while (j < hollowObjectPrefabs.Length && randomProb > hollowObjectProbabilities[j])
+                {
+                    randomProb -= hollowObjectProbabilities[j];
+                    j++;
+                }
+
+                // Spawn the selected hollow object prefab from the hollowObjectPrefabs array
+                GameObject obj = Instantiate(hollowObjectPrefabs[j]);
 
                 // Get the height of the terrain at the object's position
                 RaycastHit hit;
@@ -122,74 +199,6 @@ public class MeshGenerator : MonoBehaviour
         }
     }
 
-    public GameObject[] treePrefabs;
-
-    public float treeSpawnRate = 0.01f; // The rate of spawning trees
-
-    void SpawnTrees()
-    {
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            // Randomly decide whether to spawn a tree
-            if (Random.value < treeSpawnRate)
-            {
-                // Spawn a random tree prefab from the treePrefabs array
-                GameObject treeToSpawn = treePrefabs[Random.Range(0, treePrefabs.Length)];
-                GameObject obj = Instantiate(treeToSpawn);
-
-                // Get the height of the terrain at the object's position
-                RaycastHit hit;
-                if (Physics.Raycast(vertices[i] + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity, groundMask))
-                {
-                    // Set the object's position to the terrain height plus a small offset
-                    obj.transform.position = new Vector3(vertices[i].x, hit.point.y, vertices[i].z);
-                }
-                else
-                {
-                    // If the raycast didn't hit the terrain, just position the object on the vertex with a small offset
-                    obj.transform.position = vertices[i];
-                }
-
-                obj.transform.localScale = Vector3.one * Random.Range(0.5f, 1.5f);
-                obj.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-                obj.transform.parent = transform;
-            }
-        }
-    }
-
-    public GameObject[] buildingPrefabs;
-    public float buildingSpawnRate = 0.005f; // The rate of spawning buildings
-
-    void SpawnBuildings()
-    {
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            // Randomly decide whether to spawn a building
-            if (Random.value < buildingSpawnRate)
-            {
-                // Spawn a random building prefab from the buildingPrefabs array
-                GameObject buildingToSpawn = buildingPrefabs[Random.Range(0, buildingPrefabs.Length)];
-                GameObject obj = Instantiate(buildingToSpawn);
-
-                // Get the height of the terrain at the object's position
-                RaycastHit hit;
-                if (Physics.Raycast(vertices[i] + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity, groundMask))
-                {
-                    // Set the object's position to the terrain height plus a small offset
-                    obj.transform.position = new Vector3(vertices[i].x, hit.point.y, vertices[i].z);
-                }
-                else
-                {
-                    // If the raycast didn't hit the terrain, just position the object on the vertex with a small offset
-                    obj.transform.position = vertices[i];
-                }
-
-                obj.transform.localScale = Vector3.one * Random.Range(1.0f, 3.0f);
-                obj.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-                obj.transform.parent = transform;
-            }
-        }
-    }
 
     // Update is called once per frame
     void Update()

@@ -80,13 +80,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isRunning = true;
             playerAnimator.SetTrigger("Run");
-            playerAnimator.SetFloat("XSpeed", moveDirection.x);
-        }
-        else if (Input.GetKeyDown(runKey) && isGrounded && verticalInput != 0)
-        {
-            isRunning = true;
-            playerAnimator.SetTrigger("Run");
-            playerAnimator.SetFloat("YSpeed", moveDirection.z);
+            playerAnimator.SetFloat("XSpeed", moveDirection.x * 2f);
         }
 
         // Jumping
