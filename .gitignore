@@ -42,3 +42,5 @@ Thumbs.db
 *.log
 *.log
 3D/Logs/shadercompiler-UnityShaderCompiler.exe0.log
+3D/Logs/shadercompiler-UnityShaderCompiler.exe0.log
+3D/UserSettings/EditorUserSettings.asset
