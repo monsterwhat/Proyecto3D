@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class FirstPersonController : MonoBehaviour
+public class CharacterController : MonoBehaviour
 {
     [Header("RigidBody")]
     public Rigidbody rb;
@@ -102,7 +102,7 @@ public class FirstPersonController : MonoBehaviour
     public float jumpPower = 5f;
 
     // Internal Variables
-    private bool isGrounded = false;
+    public bool isGrounded = false;
 
     #endregion
 

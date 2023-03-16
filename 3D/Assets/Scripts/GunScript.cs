@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GunScript : MonoBehaviour
 {
-    private FirstPersonController _input;
+    private CharacterController _input;
 
     [Header("Camera")]
     public Camera fpsCam;
@@ -56,7 +56,7 @@ public class GunScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _input = transform.root.GetComponent<FirstPersonController>();
+        _input = transform.root.GetComponent<CharacterController>();
         defaultPosition = transform.localPosition;
         currentAmmo = maxAmmo;
     }
@@ -97,7 +97,7 @@ public class GunScript : MonoBehaviour
             }
             else
             {
-                Shoot();
+                    Shoot();
             }
             _input.shoot = false;
         }
