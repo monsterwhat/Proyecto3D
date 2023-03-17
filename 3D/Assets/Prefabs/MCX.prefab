@@ -5125,22 +5125,22 @@ MonoBehaviour:
   bulletPoint: {fileID: 9204831267097793436}
   bulletExit: {fileID: 8876681412369319863}
   isBallistic: 0
-  isRaycast: 1
   bulletSpeed: 2000
   shellSpeed: 100
   bulletLifeTime: 2
   shellLifeTime: 2
-  aimOffset: 0.5
-  zoomOffset: 0.5
-  mussleFlash: {fileID: 0}
-  impactEffect: {fileID: 0}
-  isAuto: 0
-  maxAmmo: 10
-  reloadTime: 1
-  damage: 10
-  fireRate: 0.5
+  aimOffset: 1
+  zoomOffset: 1
+  gunSize: 0.16
+  mussleFlash: {fileID: 2740147944414079314, guid: 6e5b244b2c089984090a4222c0e5394d, type: 3}
+  impactEffect: {fileID: 6192724089161036641, guid: b0454b34104a5874cad8ec7c8368149c, type: 3}
+  maxAmmo: 30
+  reloadTime: 4
+  damage: 20
+  fireRate: 12
   range: 100
   impactForce: 30
+  impactDuration: 0.5
 --- !u!1 &1017680658654434068
 GameObject:
   m_ObjectHideFlags: 0

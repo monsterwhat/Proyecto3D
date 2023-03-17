@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GunScript : MonoBehaviour
 {
-    private CharacterController _input;
+    private AdvancedCharacterController _input;
 
-    [Header("Camera")]
+    [Header("Camera (Auto)")]
     public Camera fpsCam;
 
     [Header("Prefabs")]
@@ -27,24 +28,26 @@ public class GunScript : MonoBehaviour
     [SerializeField] private float shellLifeTime = 2f;
 
     [Header("Camera Settings")]
-    [SerializeField] private float aimOffset = 0.5f;
-    [SerializeField] private float zoomOffset = 0.5f;
+    public float aimOffset = 0.5f;
+    public float zoomOffset = 0.5f;
+    public float gunSize = 1;
 
     [Header("Gun Settings")]
     public ParticleSystem mussleFlash;
     public GameObject impactEffect;
-    public bool isAuto = false;
     public int maxAmmo = 10;
     public float reloadTime = 1f;
     public float damage = 10f;
     public float fireRate = 15f;
+    public float gunRecoilMultiplier = 1f;
 
     [Header("Raycast Settings")]
     public float range = 100f;
     public float impactForce = 30f;
+    public float impactDuration = 0.2f;
 
     //Ammo Variables
-    private int currentAmmo;
+    public int currentAmmo;
     private bool isReloading = false;
     private float nextTimeToFire = 0f;
 
@@ -53,28 +56,88 @@ public class GunScript : MonoBehaviour
     private bool isAiming;
     private bool isZooming;
 
+    private void Awake()
+    {
+        // Get camera component from parent object
+        fpsCam = GetComponentInParent<Camera>();
+        _input = transform.root.GetComponent<AdvancedCharacterController>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        _input = transform.root.GetComponent<CharacterController>();
         defaultPosition = transform.localPosition;
         currentAmmo = maxAmmo;
     }
+
+    public void SetAimOffset(float newAimOffset)
+    {
+        aimOffset = newAimOffset;
+    }
+
+    public void SetZoomOffset(float newZoomOffset)
+    {
+        zoomOffset = newZoomOffset;
+    }
+
 
     IEnumerator Reload()
     {
         isReloading = true;
         Debug.Log("Reloading");
 
+        // Show reloading message
+        GameObject canvas = GameObject.Find("AmmoHUD");
+        Text reloadingText = canvas.transform.Find("ReloadText").GetComponent<Text>();
+        reloadingText.text = "Reloading...";
+        reloadingText.enabled = true;
+
         yield return new WaitForSeconds(reloadTime);
+
+        // Hide reloading message
+        reloadingText.enabled = false;
 
         currentAmmo = maxAmmo;
         isReloading = false;
+        nextTimeToFire = 0f;
     }
+
+    void UpdateAmmoCounter()
+    {
+        GameObject canvas = GameObject.Find("AmmoHUD");
+        Text ammoText = canvas.transform.Find("CurrentAmmo").GetComponent<Text>();
+        ammoText.text = currentAmmo.ToString() + " / " + maxAmmo.ToString();
+    }
+
+    void GetAiming()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            isAiming = true;
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            isAiming = false;
+        }
+    }
+
+    void GetZooming()
+    {
+        if (Input.GetMouseButtonDown(2))
+        {
+            isZooming = true;
+        }
+        else if (Input.GetMouseButtonUp(2))
+        {
+            isZooming = false;
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
     {
+        UpdateAmmoCounter();
 
         if (isReloading)
         {
@@ -87,38 +150,30 @@ public class GunScript : MonoBehaviour
             return;
         }
 
-        if (_input.shoot)
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            if (!isAuto)
+            if (currentAmmo < maxAmmo && !isReloading)
             {
-                if (Time.time >= nextTimeToFire)
-                    nextTimeToFire = Time.time + 1f / fireRate;
+                StartCoroutine(Reload());
+            }
+        }
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            if (Time.time >= nextTimeToFire)
+            {
+                nextTimeToFire = Time.time + 1f / fireRate;
                 Shoot();
             }
             else
             {
-                    Shoot();
+                return;
             }
-            _input.shoot = false;
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            isAiming = true;
-        }
-        else if (Input.GetMouseButtonUp(1))
-        {
-            isAiming = false;
-        }
+        GetAiming();
 
-        if (Input.GetMouseButtonDown(2))
-        {
-            isZooming = true;
-        }
-        else if (Input.GetMouseButtonUp(2))
-        {
-            isZooming = false;
-        }
+        GetZooming();
     }
 
     void LateUpdate()
@@ -139,43 +194,53 @@ public class GunScript : MonoBehaviour
         transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 100f, Camera.main.transform.up);
     }
 
+    private void GunRecoil()
+    {
+        // Move the gun backwards and to the side by a small amount
+        float recoilAmount = 0.02f;
+        Vector3 recoilPosition = new Vector3(Random.Range(-recoilAmount, recoilAmount), -recoilAmount, 0f);
+        transform.localPosition += recoilPosition * gunRecoilMultiplier;
+    }
+
     void Shoot()
     {
         mussleFlash.Play();
         currentAmmo--;
 
-        switch (isBallistic)
+        if (!isReloading)
         {
-            //If the bullet is ballistic, spawn a bullet and a shell
-            case true:
-                GameObject bullet = Instantiate(bulletPrefab, bulletPoint.transform.position, transform.parent.rotation);
-                GameObject shell = Instantiate(bulletPrefab, bulletExit.transform.position, transform.parent.rotation);
+            switch (isBallistic)
+            {
+                //If the bullet is ballistic, spawn a bullet and a shell
+                case true:
+                    GameObject bullet = Instantiate(bulletPrefab, bulletPoint.transform.position, transform.parent.rotation);
+                    GameObject shell = Instantiate(bulletPrefab, bulletExit.transform.position, transform.parent.rotation);
 
-                Vector3 shootDirection = Camera.main.transform.forward;
+                    Vector3 shootDirection = Camera.main.transform.forward;
 
-                shell.GetComponent<Rigidbody>().AddForce(transform.right * shellSpeed);
-                bullet.GetComponent<Rigidbody>().AddForce(shootDirection * bulletSpeed);
-                Destroy(bullet, bulletLifeTime);
-                Destroy(shell, shellLifeTime);
-                break;
+                    shell.GetComponent<Rigidbody>().AddForce(transform.right * shellSpeed);
+                    bullet.GetComponent<Rigidbody>().AddForce(shootDirection * bulletSpeed);
+                    Destroy(bullet, bulletLifeTime);
+                    Destroy(shell, shellLifeTime);
+                    break;
 
-            //If the bullet is raycast, shoot a raycast
-            case false:
-                RaycastHit hit;
-                if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
-                {
-                    Debug.Log(hit.transform.name);
-
-                    if (hit.rigidbody != null)
+                //If the bullet is raycast, shoot a raycast
+                case false:
+                    GunRecoil();
+                    RaycastHit hit;
+                    if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
                     {
-                        hit.rigidbody.AddForce(-hit.normal * impactForce);
+                        if (hit.rigidbody != null)
+                        {
+                            hit.rigidbody.AddForce(-hit.normal * impactForce);
+                        }
+
+                        GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                        Destroy(impact, impactDuration);
                     }
-
-                    GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                    Destroy(impact, 2f);
-                }
-                break;
-        }   
+                    break;
+            }
+        }
+        _input.shoot = false;
     }
-
 }
