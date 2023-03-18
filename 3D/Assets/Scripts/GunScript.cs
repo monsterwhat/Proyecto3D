@@ -51,7 +51,7 @@ public class GunScript : MonoBehaviour
 
     //Ammo Variables
     public int currentAmmo;
-    private bool isReloading = false;
+    public bool isReloading = false;
     private float nextTimeToFire = 0f;
 
     //Camera Adjustment Variables
@@ -200,10 +200,12 @@ public class GunScript : MonoBehaviour
 
     void GunRecoil()
     {
-        Vector3 recoilPosition = new Vector3(Random.Range(-recoilAmount, recoilAmount), Random.Range(-recoilAmount, recoilAmount), 0f);
-        Vector3 newPosition = Camera.main.transform.position + recoilPosition * gunRecoilMultiplier;
-        newPosition.z = Camera.main.transform.position.z;
-        Camera.main.transform.position = newPosition;
+        Vector3 recoilRotation = new Vector3(Random.Range(-recoilAmount, recoilAmount), Random.Range(-recoilAmount, recoilAmount), 0f) * gunRecoilMultiplier;
+        transform.localRotation *= Quaternion.Euler(recoilRotation);
+
+        Vector3 recoilPosition = new Vector3(Random.Range(-recoilAmount, recoilAmount), Random.Range(-recoilAmount, recoilAmount), 0f) * gunRecoilMultiplier;
+        transform.localPosition += recoilPosition;
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0f);
     }
 
     void ShootBallistic()

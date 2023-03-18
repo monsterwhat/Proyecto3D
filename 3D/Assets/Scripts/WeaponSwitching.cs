@@ -66,6 +66,13 @@ public class WeaponSwitching : MonoBehaviour
             }
         }
 
+        GunScript currentGun = transform.GetChild(previousSelectedWeapon).GetComponentInChildren<GunScript>();
+        if (currentGun != null && currentGun.isReloading)
+        {
+            // Don't switch weapon if the current weapon is reloading
+            selectedWeapon = previousSelectedWeapon;
+        }
+
         if (previousSelectedWeapon != selectedWeapon)
         {
             selectWeapon();
