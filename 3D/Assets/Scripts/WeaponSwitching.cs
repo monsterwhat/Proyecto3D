@@ -10,8 +10,12 @@ public class WeaponSwitching : MonoBehaviour
 
     public GameObject[] weapons;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
+    {
+        LoadWeapons();
+    }
+
+    void LoadWeapons()
     {
         // Instantiate all the weapons as child objects of the WeaponHolder
         foreach (GameObject weaponPrefab in weapons)
@@ -26,6 +30,12 @@ public class WeaponSwitching : MonoBehaviour
         // Select the first weapon by default
         selectedWeapon = 0;
         selectWeapon();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     void WeaponSwitcher()
@@ -67,8 +77,6 @@ public class WeaponSwitching : MonoBehaviour
     {
         WeaponSwitcher();
     }
-
-
 
     void selectWeapon()
     {

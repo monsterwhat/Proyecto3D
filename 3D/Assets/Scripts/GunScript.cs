@@ -31,6 +31,7 @@ public class GunScript : MonoBehaviour
     public float aimOffset = 0.5f;
     public float zoomOffset = 0.5f;
     public float gunSize = 1;
+    public float gunForwardOffset = 100f;
 
     [Header("Gun Settings")]
     public ParticleSystem mussleFlash;
@@ -40,6 +41,8 @@ public class GunScript : MonoBehaviour
     public float damage = 10f;
     public float fireRate = 15f;
     public float gunRecoilMultiplier = 1f;
+    public float recoilAmount = 0.02f;
+
 
     [Header("Raycast Settings")]
     public float range = 100f;
@@ -70,17 +73,6 @@ public class GunScript : MonoBehaviour
         currentAmmo = maxAmmo;
     }
 
-    public void SetAimOffset(float newAimOffset)
-    {
-        aimOffset = newAimOffset;
-    }
-
-    public void SetZoomOffset(float newZoomOffset)
-    {
-        zoomOffset = newZoomOffset;
-    }
-
-
     IEnumerator Reload()
     {
         isReloading = true;
@@ -106,7 +98,14 @@ public class GunScript : MonoBehaviour
     {
         GameObject canvas = GameObject.Find("AmmoHUD");
         Text ammoText = canvas.transform.Find("CurrentAmmo").GetComponent<Text>();
-        ammoText.text = currentAmmo.ToString() + " / " + maxAmmo.ToString();
+
+        string bulletSymbols = "";
+        for (int i = 0; i < currentAmmo; i++)
+        {
+            bulletSymbols += "I";
+        }
+
+        ammoText.text = bulletSymbols;
     }
 
     void GetAiming()
@@ -178,6 +177,11 @@ public class GunScript : MonoBehaviour
 
     void LateUpdate()
     {
+        WeaponZoom();
+    }
+
+    void WeaponZoom()
+    {
         if (isAiming)
         {
             transform.localPosition = Vector3.Lerp(transform.localPosition, defaultPosition + Vector3.forward * aimOffset, Time.deltaTime * 5f);
@@ -191,15 +195,43 @@ public class GunScript : MonoBehaviour
             transform.localPosition = Vector3.Lerp(transform.localPosition, defaultPosition, Time.deltaTime * 5f);
         }
 
-        transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * 100f, Camera.main.transform.up);
+        transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * gunForwardOffset, Camera.main.transform.up);
     }
 
-    private void GunRecoil()
+    void GunRecoil()
     {
-        // Move the gun backwards and to the side by a small amount
-        float recoilAmount = 0.02f;
-        Vector3 recoilPosition = new Vector3(Random.Range(-recoilAmount, recoilAmount), -recoilAmount, 0f);
-        transform.localPosition += recoilPosition * gunRecoilMultiplier;
+        Vector3 recoilPosition = new Vector3(Random.Range(-recoilAmount, recoilAmount), Random.Range(-recoilAmount, recoilAmount), 0f);
+        Vector3 newPosition = Camera.main.transform.position + recoilPosition * gunRecoilMultiplier;
+        newPosition.z = Camera.main.transform.position.z;
+        Camera.main.transform.position = newPosition;
+    }
+
+    void ShootBallistic()
+    {
+        GameObject bullet = Instantiate(bulletPrefab, bulletPoint.transform.position, transform.parent.rotation);
+        GameObject shell = Instantiate(bulletPrefab, bulletExit.transform.position, transform.parent.rotation);
+
+        Vector3 shootDirection = Camera.main.transform.forward;
+
+        shell.GetComponent<Rigidbody>().AddForce(transform.right * shellSpeed);
+        bullet.GetComponent<Rigidbody>().AddForce(shootDirection * bulletSpeed);
+        Destroy(bullet, bulletLifeTime);
+        Destroy(shell, shellLifeTime);
+    }
+
+    void ShootRayCast()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        {
+            if (hit.rigidbody != null)
+            {
+                hit.rigidbody.AddForce(-hit.normal * impactForce);
+            }
+
+            GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            Destroy(impact, impactDuration);
+        }
     }
 
     void Shoot()
@@ -213,31 +245,13 @@ public class GunScript : MonoBehaviour
             {
                 //If the bullet is ballistic, spawn a bullet and a shell
                 case true:
-                    GameObject bullet = Instantiate(bulletPrefab, bulletPoint.transform.position, transform.parent.rotation);
-                    GameObject shell = Instantiate(bulletPrefab, bulletExit.transform.position, transform.parent.rotation);
-
-                    Vector3 shootDirection = Camera.main.transform.forward;
-
-                    shell.GetComponent<Rigidbody>().AddForce(transform.right * shellSpeed);
-                    bullet.GetComponent<Rigidbody>().AddForce(shootDirection * bulletSpeed);
-                    Destroy(bullet, bulletLifeTime);
-                    Destroy(shell, shellLifeTime);
+                    ShootBallistic();
                     break;
 
                 //If the bullet is raycast, shoot a raycast
                 case false:
+                    ShootRayCast();
                     GunRecoil();
-                    RaycastHit hit;
-                    if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
-                    {
-                        if (hit.rigidbody != null)
-                        {
-                            hit.rigidbody.AddForce(-hit.normal * impactForce);
-                        }
-
-                        GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                        Destroy(impact, impactDuration);
-                    }
                     break;
             }
         }

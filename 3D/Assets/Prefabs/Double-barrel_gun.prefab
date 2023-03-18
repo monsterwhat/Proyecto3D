@@ -225,6 +225,7 @@ MonoBehaviour:
   aimOffset: 0.5
   zoomOffset: 0.5
   gunSize: 1
+  gunForwardOffset: 100
   mussleFlash: {fileID: 2740147944414079314, guid: 6e5b244b2c089984090a4222c0e5394d, type: 3}
   impactEffect: {fileID: 6192724089161036641, guid: b0454b34104a5874cad8ec7c8368149c, type: 3}
   maxAmmo: 2
@@ -232,9 +233,11 @@ MonoBehaviour:
   damage: 50
   fireRate: 1
   gunRecoilMultiplier: 1
+  recoilAmount: 0.08
   range: 25
   impactForce: 250
   impactDuration: 0.5
+  currentAmmo: 0
 --- !u!1 &801255869510776366
 GameObject:
   m_ObjectHideFlags: 0
