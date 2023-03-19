@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEditor.Animations;
 
 public class AdvancedCharacterController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class AdvancedCharacterController : MonoBehaviour
 
     [Header("RigidBody")]
     public Rigidbody rb;
+    public Animator animator;
 
     #endregion
 
@@ -69,7 +71,7 @@ public class AdvancedCharacterController : MonoBehaviour
     // Internal Variables
     private bool isWalking = false;
 
-    #region Sprint
+    #region Sprint Variables
 
     public bool enableSprint = true;
     public bool unlimitedSprint = false;
@@ -99,7 +101,7 @@ public class AdvancedCharacterController : MonoBehaviour
 
     #endregion
 
-    #region Jump
+    #region Jump Variables
 
     public bool enableJump = true;
     public KeyCode jumpKey = KeyCode.Space;
@@ -110,7 +112,7 @@ public class AdvancedCharacterController : MonoBehaviour
 
     #endregion
 
-    #region Crouch
+    #region Crouch Variables
 
     public bool enableCrouch = true;
     public bool holdToCrouch = true;
@@ -123,6 +125,7 @@ public class AdvancedCharacterController : MonoBehaviour
     private Vector3 originalScale;
 
     #endregion
+
     #endregion
 
     #region Head Bob Variables
@@ -145,6 +148,8 @@ public class AdvancedCharacterController : MonoBehaviour
         // Get the Rigidbody component of the object
         rb = GetComponent<Rigidbody>();
 
+        // Get the Animator component of the object
+
         // Get the Image component of the object's child (crosshairObject)
         crosshairObject = GetComponentInChildren<Image>();
 
@@ -159,7 +164,29 @@ public class AdvancedCharacterController : MonoBehaviour
             sprintRemaining = sprintDuration;
             sprintCooldownReset = sprintCooldown;
         }
+
     }
+
+    void updateAnimations()
+    {
+            if (!isGrounded) //IS FALLING
+            {
+            animator.SetTrigger("Fall");
+            }
+            else if (isGrounded && !isWalking) //IS IDLE
+            {
+            animator.SetTrigger("Idle");
+            }
+            else if (isWalking && !isSprinting) // IS WALKING
+            {
+            animator.SetTrigger("Walk");
+            }
+            else if (isSprinting) // IS RUNNING
+            {
+            animator.SetTrigger("Run");
+            }
+    }
+
     private void CursorLock()
     {
         //Locks the playerCursor in the Application
@@ -232,6 +259,7 @@ public class AdvancedCharacterController : MonoBehaviour
         PlayerShoot();
         PlayerCrouch();
         PlayerHeadBob();
+        updateAnimations();
     }
 
     void FixedUpdate()
