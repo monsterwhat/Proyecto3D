@@ -10,6 +10,9 @@ public class WeaponSwitching : MonoBehaviour
 
     public GameObject[] weapons;
 
+    public Transform LeftHand;
+    public Transform RightHand;
+
     private void Awake()
     {
         LoadWeapons();
@@ -100,6 +103,12 @@ public class WeaponSwitching : MonoBehaviour
             {
                 weapon.gameObject.SetActive(true);
                 gun.currentAmmo = gun.maxAmmo;
+
+                //Set hand positions
+                //LeftHand.position = gun.leftHandPosition.position;
+                //RightHand.position = gun.rightHandPosition.position;
+                LeftHand.SetPositionAndRotation(gun.leftHandPosition.position, gun.leftHandPosition.rotation);
+                RightHand.SetPositionAndRotation(gun.rightHandPosition.position, gun.rightHandPosition.rotation);
             }
             else
             {

@@ -19,8 +19,8 @@ public class GunScript : MonoBehaviour
     [SerializeField] private Transform bulletExit;
 
     [Header("Hand Placement")]
-    [SerializeField] private Transform leftHandPosition;
-    [SerializeField] private Transform rightHandPosition;
+    public Transform leftHandPosition;
+    public Transform rightHandPosition;
 
     [Header("Type of Bullets")]
     [SerializeField] private bool isBallistic = false;
@@ -58,19 +58,6 @@ public class GunScript : MonoBehaviour
     public bool isReloading = false;
     private float nextTimeToFire = 0f;
 
-    //Camera Adjustment Variables
-    private Vector3 defaultPosition;
-    private bool isAiming;
-    private bool isZooming;
-
-    private Transform HandsRig;
-    private Transform leftArm;
-    private Transform rightArm;
-    private Transform leftHand;
-    private Transform rightHand;
-    private Vector3 originalLeftPos, originalRightPos;
-    private Quaternion originalLeftRot, originalRightRot;
-
     private void Awake()
     {
         // Get camera component from parent object
@@ -78,51 +65,10 @@ public class GunScript : MonoBehaviour
         _input = transform.root.GetComponent<AdvancedCharacterController>();
     }
 
-    void loadHands()
-    {
-        getHands();
-        resetHands();
-        setHands();
-    }
-
-    void resetHands()
-    {
-        leftHand.position = originalLeftPos;
-        leftHand.rotation = originalLeftRot;
-        rightHand.position = originalRightPos;
-        rightHand.rotation = originalRightRot;
-    }
-
-    void getHands()
-    {
-        HandsRig = GameObject.Find("HandsRig").transform;
-        leftArm = GameObject.Find("LeftHandMover").transform;
-        rightArm = GameObject.Find("RightHandMover").transform;
-
-        leftHand = GameObject.Find("LeftHand").transform;
-        rightHand = GameObject.Find("RightHand").transform;
-
-        originalLeftPos = leftHand.position;
-        originalLeftRot = leftHand.rotation;
-        originalRightPos = rightHand.position;
-        originalRightRot = rightHand.rotation;
-    }
-
-    void setHands()
-    {
-        leftHand.position = leftHandPosition.position;
-        leftHand.rotation = leftHandPosition.rotation;
-
-        rightHand.position = rightHandPosition.position;
-        rightHand.rotation = rightHandPosition.rotation;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        defaultPosition = transform.localPosition;
         currentAmmo = maxAmmo;
-        loadHands();
     }
 
     IEnumerator Reload()
@@ -160,31 +106,6 @@ public class GunScript : MonoBehaviour
         ammoText.text = bulletSymbols;
     }
 
-    void GetAiming()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            isAiming = true;
-        }
-        else if (Input.GetMouseButtonUp(1))
-        {
-            isAiming = false;
-        }
-    }
-
-    void GetZooming()
-    {
-        if (Input.GetMouseButtonDown(2))
-        {
-            isZooming = true;
-        }
-        else if (Input.GetMouseButtonUp(2))
-        {
-            isZooming = false;
-        }
-    }
-
-
     // Update is called once per frame
     void Update()
     {
@@ -221,33 +142,6 @@ public class GunScript : MonoBehaviour
                 return;
             }
         }
-
-        GetAiming();
-
-        GetZooming();
-    }
-
-    void LateUpdate()
-    {
-        WeaponZoom();
-    }
-
-    void WeaponZoom()
-    {
-        if (isAiming)
-        {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, defaultPosition + Vector3.forward * aimOffset, Time.deltaTime * 5f);
-        }
-        else if (isZooming)
-        {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, defaultPosition + Vector3.forward * zoomOffset, Time.deltaTime * 5f);
-        }
-        else
-        {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, defaultPosition, Time.deltaTime * 5f);
-        }
-
-        transform.LookAt(Camera.main.transform.position + Camera.main.transform.forward * gunForwardOffset, Camera.main.transform.up);
     }
 
     void GunRecoil()
