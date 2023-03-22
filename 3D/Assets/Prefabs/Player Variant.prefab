@@ -1,103 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &743406702
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1705571916705623852}
-    m_Modifications:
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580842728, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2686890238580948232, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_Name
-      value: BasicMotionsDummy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3664583781742979463, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-      propertyPath: m_RigLayers.Array.data[1].m_Rig
-      value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
---- !u!114 &198577624293339233 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 198577624893033487, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-  m_PrefabInstance: {fileID: 743406702}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!95 &2686890237854675742 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 2686890238588325744, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-  m_PrefabInstance: {fileID: 743406702}
-  m_PrefabAsset: {fileID: 0}
---- !u!20 &5791756352874407481 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 5791756353483545175, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-  m_PrefabInstance: {fileID: 743406702}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7650152117438548042 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7650152117779297316, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-  m_PrefabInstance: {fileID: 743406702}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8044819578052085840 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8044819577309787198, guid: 7856c197eb4c77840878eba92e1c48b7, type: 3}
-  m_PrefabInstance: {fileID: 743406702}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3048928068048065166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216,31 +118,26 @@ PrefabInstance:
     - target: {fileID: 6447411182595379395, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: joint
       value: 
-      objectReference: {fileID: 7650152117438548042}
+      objectReference: {fileID: 0}
     - target: {fileID: 6447411182595379395, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: animator
       value: 
-      objectReference: {fileID: 2686890237854675742}
+      objectReference: {fileID: 0}
     - target: {fileID: 6447411182595379395, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: sprintBar
       value: 
-      objectReference: {fileID: 198577624293339233}
+      objectReference: {fileID: 0}
     - target: {fileID: 6447411182595379395, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: sprintBarBG
       value: 
-      objectReference: {fileID: 8044819578052085840}
+      objectReference: {fileID: 0}
     - target: {fileID: 6447411182595379395, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: playerCamera
       value: 
-      objectReference: {fileID: 5791756352874407481}
+      objectReference: {fileID: 0}
     - target: {fileID: 6447411182595379395, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: enableHeadBob
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
---- !u!4 &1705571916705623852 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
-  m_PrefabInstance: {fileID: 3048928068048065166}
-  m_PrefabAsset: {fileID: 0}

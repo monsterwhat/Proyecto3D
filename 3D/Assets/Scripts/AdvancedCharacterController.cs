@@ -259,7 +259,7 @@ public class AdvancedCharacterController : MonoBehaviour
         PlayerShoot();
         PlayerCrouch();
         PlayerHeadBob();
-        updateAnimations();
+        //updateAnimations();
     }
 
     void FixedUpdate()
