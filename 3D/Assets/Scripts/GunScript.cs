@@ -20,7 +20,6 @@ public class GunScript : MonoBehaviour
 
     [Header("Hand Placement")]
     public Transform leftHandPosition;
-    public Transform rightHandPosition;
 
     [Header("Type of Bullets")]
     [SerializeField] private bool isBallistic = false;
@@ -180,6 +179,7 @@ public class GunScript : MonoBehaviour
             GameObject impact = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impact, impactDuration);
         }
+        else return;
     }
 
     void Shoot()
