@@ -1,13 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponSwitching : MonoBehaviour
 {
     public int selectedWeapon = 0;
 
-    public float weaponDistance = 1.0f; // distance between weapons
     public float weaponScale = 1.0f; // scale of weapons
-    public float weaponRotation = 0.0f; // rotation of weapons around Y axis
 
     public GameObject[] weapons;
 
@@ -20,24 +19,34 @@ public class WeaponSwitching : MonoBehaviour
         LoadWeapons();
     }
 
+    private List<Vector3> weaponPositions = new List<Vector3>();
+    private List<Quaternion> weaponRotations = new List<Quaternion>();
+
     void LoadWeapons()
     {
+        // Reset weapon positions and rotations
+        weaponPositions.Clear();
+        weaponRotations.Clear();
+
         // Instantiate all the weapons as child objects of the RightHand transform
-        foreach (GameObject weaponPrefab in weapons)
+        for (int i = 0; i < weapons.Length; i++)
         {
+            GameObject weaponPrefab = weapons[i];
             GameObject weapon = Instantiate(weaponPrefab, RightHand);
             weapon.SetActive(false);
             var gunscript = weapon.GetComponent<GunScript>();
-            weapon.transform.localPosition = new Vector3(gunscript.xOffset, gunscript.yOffset, gunscript.zOffset); // set weapon position to (0, 0, 0) relative to the RightHand
+            weaponPositions.Add(new Vector3(gunscript.xOffset, gunscript.yOffset, gunscript.zOffset));
+            weaponRotations.Add(Quaternion.Euler(0, 0, 0));
+            weapon.transform.localPosition = weaponPositions[i]; // set weapon position based on offsets
             weapon.transform.localScale = Vector3.one * weaponScale; // set weapon scale
-            weapon.transform.localRotation = Quaternion.Euler(0, gunscript.weaponRotation, 0); // set weapon rotation
-            weapon.transform.GetChild(0).localRotation = Quaternion.identity; // align the muzzle with the parent object's local rotation
+            weapon.transform.localRotation = weaponRotations[i]; // set weapon rotation
         }
 
         // Select the first weapon by default
         selectedWeapon = 0;
         selectWeapon(selectedWeapon);
     }
+
 
     // Start is called before the first frame update
     void Start()
@@ -100,10 +109,10 @@ public class WeaponSwitching : MonoBehaviour
             GunScript gun = child.GetComponentInChildren<GunScript>();
             if (gun != null)
             {
-                child.localPosition = Vector3.zero;
-                // Set the scale and rotation of the weapon
+                // Reset the weapon's position and rotation to their original values
+                child.localPosition = new Vector3(gun.xOffset, gun.yOffset, gun.zOffset);
+                child.localRotation = Quaternion.Euler(gun.gunRotations);
                 child.localScale = Vector3.one * gun.gunSize;
-                child.localRotation = Quaternion.Euler(0, weaponRotation, 0);
 
                 if (i == weaponIndex)
                 {
@@ -125,4 +134,5 @@ public class WeaponSwitching : MonoBehaviour
         }
         selectedWeapon = weaponIndex;
     }
+
 }

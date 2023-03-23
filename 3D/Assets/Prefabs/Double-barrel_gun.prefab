@@ -220,7 +220,10 @@ MonoBehaviour:
   bulletPoint: {fileID: 6030224875387233351}
   bulletExit: {fileID: 7336834041644280296}
   leftHandPosition: {fileID: 8127071537646945009}
-  rightHandPosition: {fileID: 6147161844932409302}
+  xOffset: -0.0286372
+  yOffset: -0.05354549
+  zOffset: 0.04566779
+  gunRotations: {x: -7.864, y: -2.305, z: -176.475}
   isBallistic: 0
   bulletSpeed: 2000
   shellSpeed: 100
@@ -237,7 +240,7 @@ MonoBehaviour:
   damage: 50
   fireRate: 1
   gunRecoilMultiplier: 1
-  recoilAmount: 0.08
+  recoilAmount: 0
   range: 25
   impactForce: 250
   impactDuration: 0.5

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,12 +26,7 @@ public class GunScript : MonoBehaviour
     public float yOffset;
     public float zOffset;
     [Header("Gun offset")]
-    public float gunOffsetX;
-    public float gunOffsetY;
-    public float gunOffsetZ;
-
-    [Range(-1f, 1f)]
-    public float weaponRotation;
+    public Vector3 gunRotations;
 
     [Header("Type of Bullets")]
     [SerializeField] private bool isBallistic = false;
@@ -68,11 +64,25 @@ public class GunScript : MonoBehaviour
     public bool isReloading = false;
     private float nextTimeToFire = 0f;
 
+    public string GetHierarchyPath()
+    {
+        string path = gameObject.name;
+        GameObject current = gameObject;
+
+        while (current.transform.parent != null)
+        {
+            current = current.transform.parent.gameObject;
+            path = current.name + "/" + path;
+        }
+
+        return path;
+    }
+
     private void Awake()
     {
-        // Get camera component from parent object
-        fpsCam = transform.root.GetComponent<Camera>();
         _input = transform.root.GetComponent<AdvancedCharacterController>();
+        // Get camera component
+        fpsCam = transform.root.GetComponentInChildren<Camera>();
     }
 
     // Start is called before the first frame update
@@ -154,6 +164,7 @@ public class GunScript : MonoBehaviour
         }
     }
 
+    /*
     void GunRecoil()
     {
         Vector3 recoilRotation = new Vector3(Random.Range(-recoilAmount, recoilAmount), Random.Range(-recoilAmount, recoilAmount), 0f) * gunRecoilMultiplier;
@@ -163,6 +174,7 @@ public class GunScript : MonoBehaviour
         transform.localPosition += recoilPosition;
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0f);
     }
+    */
 
     void ShootBallistic()
     {
@@ -210,7 +222,7 @@ public class GunScript : MonoBehaviour
                 //If the bullet is raycast, shoot a raycast
                 case false:
                     ShootRayCast();
-                    GunRecoil();
+                    //GunRecoil();
                     break;
             }
         }

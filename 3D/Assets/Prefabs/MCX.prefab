@@ -5130,10 +5130,8 @@ MonoBehaviour:
   xOffset: -0.33
   yOffset: -0.04
   zOffset: 0.051
-  gunOffsetX: 180
-  gunOffsetY: 90
-  gunOffsetZ: 10
-  weaponRotation: -1
+  gunRotations: {x: 180, y: 90, z: 10}
+  weaponRotation: 0
   isBallistic: 0
   bulletSpeed: 2000
   shellSpeed: 100
@@ -5150,7 +5148,7 @@ MonoBehaviour:
   damage: 20
   fireRate: 12
   gunRecoilMultiplier: 1
-  recoilAmount: 0.02
+  recoilAmount: 0
   range: 100
   impactForce: 30
   impactDuration: 0.5
