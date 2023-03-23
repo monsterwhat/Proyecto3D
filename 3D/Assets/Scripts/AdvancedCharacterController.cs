@@ -254,7 +254,7 @@ public class AdvancedCharacterController : MonoBehaviour
 
         UpdateCamera();
 
-        PlayerSprint();
+        PlayerSprint(); 
         PlayerJump();
         PlayerShoot();
         PlayerCrouch();

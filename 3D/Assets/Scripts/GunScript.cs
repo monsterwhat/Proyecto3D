@@ -20,6 +20,17 @@ public class GunScript : MonoBehaviour
 
     [Header("Hand Placement")]
     public Transform leftHandPosition;
+    [Header("Hand Rotations")]
+    public float xOffset;
+    public float yOffset;
+    public float zOffset;
+    [Header("Gun offset")]
+    public float gunOffsetX;
+    public float gunOffsetY;
+    public float gunOffsetZ;
+
+    [Range(-1f, 1f)]
+    public float weaponRotation;
 
     [Header("Type of Bullets")]
     [SerializeField] private bool isBallistic = false;
@@ -60,7 +71,7 @@ public class GunScript : MonoBehaviour
     private void Awake()
     {
         // Get camera component from parent object
-        fpsCam = GetComponentInParent<Camera>();
+        fpsCam = transform.root.GetComponent<Camera>();
         _input = transform.root.GetComponent<AdvancedCharacterController>();
     }
 

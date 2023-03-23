@@ -5127,6 +5127,13 @@ MonoBehaviour:
   bulletPoint: {fileID: 9204831267097793436}
   bulletExit: {fileID: 8876681412369319863}
   leftHandPosition: {fileID: 7244996502592360016}
+  xOffset: -0.33
+  yOffset: -0.04
+  zOffset: 0.051
+  gunOffsetX: 180
+  gunOffsetY: 90
+  gunOffsetZ: 10
+  weaponRotation: -1
   isBallistic: 0
   bulletSpeed: 2000
   shellSpeed: 100

@@ -13,6 +13,7 @@ public class WeaponSwitching : MonoBehaviour
 
     public Transform LeftHand;
     public Transform RightHand;
+    public Transform RightHandPosition; // position where weapon should spawn
 
     private void Awake()
     {
@@ -26,9 +27,11 @@ public class WeaponSwitching : MonoBehaviour
         {
             GameObject weapon = Instantiate(weaponPrefab, RightHand);
             weapon.SetActive(false);
-            weapon.transform.localPosition = Vector3.zero; // set weapon position to (0, 0, 0) relative to the RightHand
+            var gunscript = weapon.GetComponent<GunScript>();
+            weapon.transform.localPosition = new Vector3(gunscript.xOffset, gunscript.yOffset, gunscript.zOffset); // set weapon position to (0, 0, 0) relative to the RightHand
             weapon.transform.localScale = Vector3.one * weaponScale; // set weapon scale
-            weapon.transform.localRotation = Quaternion.Euler(0, weaponRotation, 0); // set weapon rotation
+            weapon.transform.localRotation = Quaternion.Euler(0, gunscript.weaponRotation, 0); // set weapon rotation
+            weapon.transform.GetChild(0).localRotation = Quaternion.identity; // align the muzzle with the parent object's local rotation
         }
 
         // Select the first weapon by default
@@ -108,8 +111,8 @@ public class WeaponSwitching : MonoBehaviour
                     gun.currentAmmo = gun.maxAmmo;
 
                     //Set hand positions
-                    LeftHand.position = gun.leftHandPosition.position;
-                    //RightHand.position = gun.rightHandPosition.position;
+                    //LeftHand.position = gun.leftHandPosition.position;
+                    RightHand.position = RightHandPosition.position;
 
                     child.SetParent(RightHand);
                 }
