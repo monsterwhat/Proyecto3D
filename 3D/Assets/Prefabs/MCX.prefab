@@ -5131,7 +5131,10 @@ MonoBehaviour:
   yOffset: -0.04
   zOffset: 0.051
   gunRotations: {x: 180, y: 90, z: 10}
-  weaponRotation: 0
+  HintleftHandRotation: {x: 355.3924, y: 19.184977, z: 12.307952}
+  HintleftHandPosition: {x: -0.184, y: 1.356, z: 0.217}
+  HintrightHandPosition: {x: 0.183, y: 1.248, z: 0.079}
+  HintrightHandRotation: {x: 347.453, y: 288.44702, z: 356.06497}
   isBallistic: 0
   bulletSpeed: 2000
   shellSpeed: 100

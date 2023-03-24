@@ -27,6 +27,11 @@ public class GunScript : MonoBehaviour
     public float zOffset;
     [Header("Gun offset")]
     public Vector3 gunRotations;
+    [Header("HandHelpers")]
+    public Vector3 HintleftHandRotation;
+    public Vector3 HintleftHandPosition;
+    public Vector3 HintrightHandPosition;
+    public Vector3 HintrightHandRotation;
 
     [Header("Type of Bullets")]
     [SerializeField] private bool isBallistic = false;

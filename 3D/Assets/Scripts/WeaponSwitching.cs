@@ -95,6 +95,20 @@ public class WeaponSwitching : MonoBehaviour
         }
     }
 
+    public string GetHierarchyPath()
+    {
+        string path = gameObject.name;
+        GameObject current = gameObject;
+
+        while (current.transform.parent != null)
+        {
+            current = current.transform.parent.gameObject;
+            path = current.name + "/" + path;
+        }
+
+        return path;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -120,7 +134,7 @@ public class WeaponSwitching : MonoBehaviour
                     gun.currentAmmo = gun.maxAmmo;
 
                     //Set hand positions
-                    //LeftHand.position = gun.leftHandPosition.position;
+                    LeftHand.position = gun.leftHandPosition.position;
                     RightHand.position = RightHandPosition.position;
 
                     child.SetParent(RightHand);
