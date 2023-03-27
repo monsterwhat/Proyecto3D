@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class WeaponSwitching : MonoBehaviour
 {
@@ -10,9 +11,8 @@ public class WeaponSwitching : MonoBehaviour
 
     public GameObject[] weapons;
 
-    public Transform LeftHand;
-    public Transform RightHand;
-    public Transform RightHandPosition; // position where weapon should spawn
+    public Transform RightHandIK;
+    public Transform LeftHandIK;
 
     private void Awake()
     {
@@ -28,14 +28,14 @@ public class WeaponSwitching : MonoBehaviour
         weaponPositions.Clear();
         weaponRotations.Clear();
 
-        // Instantiate all the weapons as child objects of the RightHand transform
+        // Instantiate all the weapons as child objects of this object
         for (int i = 0; i < weapons.Length; i++)
         {
             GameObject weaponPrefab = weapons[i];
-            GameObject weapon = Instantiate(weaponPrefab, RightHand);
+            GameObject weapon = Instantiate(weaponPrefab, transform);
             weapon.SetActive(false);
             var gunscript = weapon.GetComponent<GunScript>();
-            weaponPositions.Add(new Vector3(gunscript.xOffset, gunscript.yOffset, gunscript.zOffset));
+            weaponPositions.Add(new Vector3(0, 0, 0));
             weaponRotations.Add(Quaternion.Euler(0, 0, 0));
             weapon.transform.localPosition = weaponPositions[i]; // set weapon position based on offsets
             weapon.transform.localScale = Vector3.one * weaponScale; // set weapon scale
@@ -45,13 +45,6 @@ public class WeaponSwitching : MonoBehaviour
         // Select the first weapon by default
         selectedWeapon = 0;
         selectWeapon(selectedWeapon);
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
     }
 
     void WeaponSwitcher()
@@ -82,11 +75,17 @@ public class WeaponSwitching : MonoBehaviour
             }
         }
 
-        GunScript currentGun = RightHand.GetChild(0).GetComponentInChildren<GunScript>();
-        if (currentGun != null && currentGun.isReloading)
+        GunScript[] currentGun = transform.GetComponentsInChildren<GunScript>();
+        for (int i = 0; i < currentGun.Length; i++)
         {
-            // Don't switch weapon if the current weapon is reloading
-            selectedWeapon = previousSelectedWeapon;
+            if (currentGun[i].isActiveAndEnabled)
+            {
+                if (currentGun[i].isReloading)
+                {
+                    // Don't switch weapon if the current weapon is reloading
+                    selectedWeapon = previousSelectedWeapon;
+                }
+            }
         }
 
         if (previousSelectedWeapon != selectedWeapon)
@@ -94,6 +93,7 @@ public class WeaponSwitching : MonoBehaviour
             selectWeapon(selectedWeapon);
         }
     }
+
 
     public string GetHierarchyPath()
     {
@@ -118,26 +118,20 @@ public class WeaponSwitching : MonoBehaviour
     void selectWeapon(int weaponIndex)
     {
         int i = 0;
-        foreach (Transform child in RightHand)
+        foreach (Transform child in transform)
         {
             GunScript gun = child.GetComponentInChildren<GunScript>();
             if (gun != null)
             {
                 // Reset the weapon's position and rotation to their original values
-                child.localPosition = new Vector3(gun.xOffset, gun.yOffset, gun.zOffset);
-                child.localRotation = Quaternion.Euler(gun.gunRotations);
+                child.localPosition = new Vector3(0, 0, 0);
+                child.localRotation = Quaternion.Euler(0,0,0);
                 child.localScale = Vector3.one * gun.gunSize;
 
                 if (i == weaponIndex)
                 {
                     child.gameObject.SetActive(true);
                     gun.currentAmmo = gun.maxAmmo;
-
-                    //Set hand positions
-                    LeftHand.position = gun.leftHandPosition.position;
-                    RightHand.position = RightHandPosition.position;
-
-                    child.SetParent(RightHand);
                 }
                 else
                 {
@@ -148,5 +142,4 @@ public class WeaponSwitching : MonoBehaviour
         }
         selectedWeapon = weaponIndex;
     }
-
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.UI;
 
 public class GunScript : MonoBehaviour
@@ -21,17 +22,7 @@ public class GunScript : MonoBehaviour
 
     [Header("Hand Placement")]
     public Transform leftHandPosition;
-    [Header("Hand Rotations")]
-    public float xOffset;
-    public float yOffset;
-    public float zOffset;
-    [Header("Gun offset")]
-    public Vector3 gunRotations;
-    [Header("HandHelpers")]
-    public Vector3 HintleftHandRotation;
-    public Vector3 HintleftHandPosition;
-    public Vector3 HintrightHandPosition;
-    public Vector3 HintrightHandRotation;
+    public Transform rightHandPosition;
 
     [Header("Type of Bullets")]
     [SerializeField] private bool isBallistic = false;
@@ -81,6 +72,28 @@ public class GunScript : MonoBehaviour
         }
 
         return path;
+    }
+
+    void PositionHands()
+    {
+            if (this.rightHandPosition == null || this.leftHandPosition == null)
+            {
+                return;
+            }
+
+            var _WeaponSwitching = this.transform.root.GetComponentInChildren<WeaponSwitching>();
+
+            TwoBoneIKConstraint ikLeftHandContraint = _WeaponSwitching.LeftHandIK.GetComponent<TwoBoneIKConstraint>();  
+            TwoBoneIKConstraint ikRightHandConstraint = _WeaponSwitching.RightHandIK.GetComponent<TwoBoneIKConstraint>();
+
+            GameObject newRightTarget = this.rightHandPosition.gameObject;
+            ikRightHandConstraint.data.target = newRightTarget.transform;
+            //ikRightHandConstraint.data.target.position = newRightTarget.transform.position;
+        //ikRightHandConstraint.data.target.localPosition = newRightTarget.transform.position;
+
+        GameObject newLeftTarget = this.leftHandPosition.gameObject;
+            ikLeftHandContraint.data.target = newLeftTarget.transform;
+            //ikLeftHandContraint.data.target.localPosition = newLeftTarget.transform.position;
     }
 
     private void Awake()
@@ -134,6 +147,8 @@ public class GunScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        AimAtTarget(fpsCam.transform.Find("CrossHairDirection"));
+        updateHands();
         UpdateAmmoCounter();
 
         if (isReloading)
@@ -168,6 +183,30 @@ public class GunScript : MonoBehaviour
             }
         }
     }
+
+    void updateHands()
+    {
+        if (this.rightHandPosition == null || this.leftHandPosition == null)
+        {
+            return;
+        }
+
+        var _WeaponSwitching = this.GetComponentInParent<WeaponSwitching>();
+
+        TwoBoneIKConstraint ikLeftHandContraint = _WeaponSwitching.LeftHandIK.GetComponent<TwoBoneIKConstraint>();
+        TwoBoneIKConstraint ikRightHandConstraint = _WeaponSwitching.RightHandIK.GetComponent<TwoBoneIKConstraint>();
+                
+                    GameObject newLeftTarget = this.leftHandPosition.gameObject;
+
+                    GameObject newRightTarget = this.rightHandPosition.gameObject;
+
+                    if (ikRightHandConstraint.data.target != null && ikLeftHandContraint.data.target != null)
+                    {
+                        ikRightHandConstraint.data.target = newLeftTarget.transform;
+                        ikLeftHandContraint.data.target = newRightTarget.transform;
+                    }
+                }
+
 
     /*
     void GunRecoil()
@@ -209,6 +248,22 @@ public class GunScript : MonoBehaviour
         }
         else return;
     }
+
+    public void AimAtTarget(Transform target)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.Find("BulletPoint"))
+            {
+                // Calculate the direction to the target
+                Vector3 direction = target.position - child.position;
+
+                // Rotate the muzzle to face the target
+                child.rotation = Quaternion.LookRotation(direction);
+            }
+        }
+    }
+
 
     void Shoot()
     {
