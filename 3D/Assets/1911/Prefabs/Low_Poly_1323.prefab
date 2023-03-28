@@ -23,9 +23,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 32576229}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.15, y: 0.84, z: -0.08}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.045440197, y: 0.09023998, z: 0.27584004}
+  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4361290258541780}
@@ -54,9 +54,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756334512}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.795, z: 1.051}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0025599003, y: 0.07584, z: 0.6377599}
+  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4361290258541780}
@@ -279,6 +279,8 @@ MonoBehaviour:
   bulletPrefab: {fileID: 465979573643381078, guid: b599cac74dbe8044a9b2d671e8bf4723, type: 3}
   bulletPoint: {fileID: 756334513}
   bulletExit: {fileID: 32576230}
+  leftHandPosition: {fileID: 0}
+  rightHandPosition: {fileID: 0}
   isBallistic: 0
   bulletSpeed: 2000
   shellSpeed: 100
@@ -286,15 +288,21 @@ MonoBehaviour:
   shellLifeTime: 2
   aimOffset: 0.5
   zoomOffset: 0.5
+  gunSize: 1
+  gunForwardOffset: 100
   mussleFlash: {fileID: 0}
   impactEffect: {fileID: 0}
   maxAmmo: 12
   reloadTime: 4
   damage: 15
   fireRate: 2
+  gunRecoilMultiplier: 1
+  recoilAmount: 0.02
   range: 100
   impactForce: 30
   impactDuration: 0.5
+  currentAmmo: 0
+  isReloading: 0
 --- !u!1 &1597942452097772
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,8 +660,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2350272621561344107}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.2529184, y: -1.650678, z: -12.238045}
-  m_LocalScale: {x: 3.125, y: 3.125, z: 3.125}
+  m_LocalPosition: {x: -0.40349376, y: -0.70677704, z: -3.6147342}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4496931430943568}

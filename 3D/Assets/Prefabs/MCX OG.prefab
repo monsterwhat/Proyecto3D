@@ -5100,7 +5100,7 @@ Transform:
   m_GameObject: {fileID: 708565261683047321}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.06, y: 0.06, z: 0.06}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2482981878503835785}
@@ -5108,6 +5108,7 @@ Transform:
   - {fileID: 8876681412369319863}
   - {fileID: 7244996502592360016}
   - {fileID: 2303959242747675563}
+  - {fileID: 7313593944729400528}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5136,7 +5137,7 @@ MonoBehaviour:
   shellLifeTime: 2
   aimOffset: 1
   zoomOffset: 1
-  gunSize: 0.06
+  gunSize: 1
   gunForwardOffset: 100
   mussleFlash: {fileID: 2740147944414079314, guid: 6e5b244b2c089984090a4222c0e5394d, type: 3}
   impactEffect: {fileID: 6192724089161036641, guid: b0454b34104a5874cad8ec7c8368149c, type: 3}
@@ -5910,6 +5911,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2677262974318596994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7313593944729400528}
+  m_Layer: 0
+  m_Name: ShoulderLock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7313593944729400528
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2677262974318596994}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.008, y: 1.671, z: -6.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4579612719276771722}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2806173134185664839
 GameObject:
   m_ObjectHideFlags: 0
@@ -8676,14 +8708,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8437252698009734436}
-  m_LocalRotation: {x: -0.53985906, y: -0.81155497, z: -0.19939047, w: -0.10086743}
-  m_LocalPosition: {x: -0.22015662, y: -0.14324054, z: 1.6055608}
+  m_LocalRotation: {x: -0.47872165, y: -0.55027455, z: -0.59216994, w: 0.3425759}
+  m_LocalPosition: {x: -1.74, y: 0.82, z: 0.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4579612719276771722}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -167.601, y: -22.833984, z: -110.222}
+  m_LocalEulerAnglesHint: {x: -101.562, y: -71.392, z: -37.182983}
 --- !u!1 &8962414702938676131
 GameObject:
   m_ObjectHideFlags: 0
