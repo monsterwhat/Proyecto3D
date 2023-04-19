@@ -80,7 +80,7 @@ public class GunScript : MonoBehaviour
             {
                 return;
             }
-
+            
             var _WeaponSwitching = this.transform.root.GetComponentInChildren<WeaponSwitching>();
 
             TwoBoneIKConstraint ikLeftHandContraint = _WeaponSwitching.LeftHandIK.GetComponent<TwoBoneIKConstraint>();  
@@ -89,7 +89,7 @@ public class GunScript : MonoBehaviour
             GameObject newRightTarget = this.rightHandPosition.gameObject;
             ikRightHandConstraint.data.target = newRightTarget.transform;
             //ikRightHandConstraint.data.target.position = newRightTarget.transform.position;
-        //ikRightHandConstraint.data.target.localPosition = newRightTarget.transform.position;
+            //ikRightHandConstraint.data.target.localPosition = newRightTarget.transform.position;
 
         GameObject newLeftTarget = this.leftHandPosition.gameObject;
             ikLeftHandContraint.data.target = newLeftTarget.transform;

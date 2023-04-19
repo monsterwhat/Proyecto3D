@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1314,6 +1314,11 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
+--- !u!95 &427259391 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 2543a6a2f25261d48b53454a13fc55c3, type: 3}
+  m_PrefabInstance: {fileID: 427259321}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &502328496
 GameObject:
   m_ObjectHideFlags: 0
@@ -2311,6 +2316,7 @@ MonoBehaviour:
   RightHandikTarget: {fileID: 2015813124}
   LeftHandikTarget: {fileID: 1930656661}
   WeaponPose: {fileID: 1972239662}
+  animator: {fileID: 427259391}
 --- !u!114 &1466177137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2820,7 +2826,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1584113737}
-  m_LocalRotation: {x: 0.15356962, y: 0.00000041733142, z: -0.00000006485879, w: 0.98813784}
+  m_LocalRotation: {x: 0.15356962, y: 0.00000045534966, z: -0.00000007076732, w: 0.98813784}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

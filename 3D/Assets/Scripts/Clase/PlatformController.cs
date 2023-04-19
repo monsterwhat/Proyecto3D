@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PlatformController : MonoBehaviour
 {
-    [SerializeField] Rigidbody platformRB;
-    [SerializeField] Transform[] platformPositions;
-    [SerializeField] float platformSpeed = 20;
+    public Rigidbody platformRB;
+    public Transform[] platformPositions;
+    public float platformSpeed = 2;
+
     private int actualPosition = 0;
     private int nextPosition = 1;
-    private bool moveToNext = true;
-    private float waitTime = 2;
+
+    public bool moveToTheNext = true;
+    public float waitTime;
 
     void Update()
     {
@@ -19,14 +21,14 @@ public class PlatformController : MonoBehaviour
 
     void movePlatform()
     {
-        if (moveToNext)
+        if (moveToTheNext)
         {
-            StopCoroutine(waitForMove(0));
+            StopCoroutine(WaitForMove(0));
             platformRB.MovePosition(Vector3.MoveTowards(platformRB.position, platformPositions[nextPosition].position, platformSpeed * Time.deltaTime));
         }
         if (Vector3.Distance(platformRB.position, platformPositions[nextPosition].position) <= 0)
         {
-            StartCoroutine(waitForMove(waitTime));
+            StartCoroutine(WaitForMove(waitTime));
             actualPosition = nextPosition;
             nextPosition++;
             if (nextPosition > platformPositions.Length - 1)
@@ -36,11 +38,14 @@ public class PlatformController : MonoBehaviour
         }
     }
 
-    IEnumerator waitForMove(float time)
+    IEnumerator WaitForMove(float time)
     {
-        moveToNext = false;
+        moveToTheNext = false;
         yield return new WaitForSeconds(time);
-        moveToNext = true;
+        moveToTheNext = true;
     }
+
+
+
 
 }

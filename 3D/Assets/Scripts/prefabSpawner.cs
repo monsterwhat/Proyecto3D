@@ -10,7 +10,7 @@ public class prefabSpawner : MonoBehaviour
     public TwoBoneIKConstraint LeftHandikTarget;
     public MultiParentConstraint WeaponPose;
     private GameObject newObject; // The spawned prefab
-    private Animator animator;
+    public Animator animator;
 
     public void SpawnPrefab()
     {
@@ -30,7 +30,6 @@ public class prefabSpawner : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
         SpawnPrefab();
     }
 
@@ -58,6 +57,7 @@ public class prefabSpawner : MonoBehaviour
         RightHandikTarget.data.target = rightHand;
         var leftHand = newObject.transform.Find("LeftHandPosition");
         LeftHandikTarget.data.target = leftHand;
+
 
     }
 
